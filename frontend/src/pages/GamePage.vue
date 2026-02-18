@@ -475,15 +475,25 @@ import fieldImage from '../assets/field.png'
 
 // Функция для правильного формирования путей к статическим файлам из public
 // В Vite файлы из public доступны по абсолютным путям от корня
+// Важно: пути должны начинаться с / и включать base path
 function getPublicPath(path) {
   // Убираем ведущий слэш если есть
   const cleanPath = path.startsWith('/') ? path.slice(1) : path
-  // BASE_URL уже содержит завершающий слэш (например, '/foxthegame/')
+  // BASE_URL в production будет '/foxthegame/'
+  // В Vite import.meta.env.BASE_URL заменяется на статическое значение при сборке
   const baseUrl = import.meta.env.BASE_URL || '/'
   // Убеждаемся что baseUrl заканчивается на /
   const base = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/'
   // Объединяем base URL и путь
-  return base + cleanPath
+  // Результат должен быть типа '/foxthegame/paw-prints.png'
+  const fullPath = base + cleanPath
+  
+  // Временная отладка - проверим что формируется
+  if (typeof window !== 'undefined') {
+    console.log(`[getPublicPath] path="${path}", BASE_URL="${baseUrl}", result="${fullPath}"`)
+  }
+  
+  return fullPath
 }
 
 // Путь к изображению лапок
