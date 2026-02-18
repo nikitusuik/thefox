@@ -2,7 +2,10 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
+  base: '/foxthegame/',
+
   plugins: [vue()],
+
   server: {
     proxy: {
       '/API': {
@@ -10,8 +13,7 @@ export default defineConfig({
         changeOrigin: true,
         secure: true,
         rewrite: (path) => path.replace(/^\/API/, '/~s368719/kovar/API'),
-      }
-    }
-    
+      },
+    },
   },
 })
