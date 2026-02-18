@@ -473,36 +473,43 @@ import { getGameState, chooseAction, movePlayer, openSuspect, accuse, skipTurn }
 import { translateItem } from '../utils/translations'
 import fieldImage from '../assets/field.png'
 
-// Базовый путь для статических файлов (учитывает base path из vite.config.js)
-// BASE_URL всегда заканчивается на /, но на всякий случай добавляем если нет
-const BASE_URL = import.meta.env.BASE_URL.endsWith('/') 
-  ? import.meta.env.BASE_URL 
-  : import.meta.env.BASE_URL + '/'
+// Функция для правильного формирования путей к статическим файлам из public
+// В Vite файлы из public доступны по абсолютным путям от корня
+function getPublicPath(path) {
+  // Убираем ведущий слэш если есть
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path
+  // BASE_URL уже содержит завершающий слэш (например, '/foxthegame/')
+  const baseUrl = import.meta.env.BASE_URL || '/'
+  // Убеждаемся что baseUrl заканчивается на /
+  const base = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/'
+  // Объединяем base URL и путь
+  return base + cleanPath
+}
 
 // Путь к изображению лапок
-const pawPrintsImage = `${BASE_URL}paw-prints.png`
+const pawPrintsImage = getPublicPath('paw-prints.png')
 // Путь к изображению лиса
-const foxImage = `${BASE_URL}fox.png`
+const foxImage = getPublicPath('fox.png')
 // Пути к изображениям кубиков
-const dice1PawImage = `${BASE_URL}1paw.png`
-const dice2PawsImage = `${BASE_URL}2paws.png`
-const diceEyeImage = `${BASE_URL}eye.png`
+const dice1PawImage = getPublicPath('1paw.png')
+const dice2PawsImage = getPublicPath('2paws.png')
+const diceEyeImage = getPublicPath('eye.png')
 
 // Картинки подозреваемых и рубашки.
 // Положи файлы в frontend/public/suspects/ с такими именами,
 // либо поправь пути под свои.
-const SUSPECT_BACK_IMG = `${BASE_URL}suspects/back.png`
+const SUSPECT_BACK_IMG = getPublicPath('suspects/back.png')
 
 // Фишки игроков (цвет из join_game / game_state.players.color)
 const PLAYER_TOKEN_IMAGES = {
-  'красный': `${BASE_URL}red.png`,
-  red: `${BASE_URL}red.png`,
-  'желтый': `${BASE_URL}yellow.png`,
-  yellow: `${BASE_URL}yellow.png`,
-  'синий': `${BASE_URL}blue.png`,
-  blue: `${BASE_URL}blue.png`,
-  'зеленый': `${BASE_URL}green.png`,
-  green: `${BASE_URL}green.png`
+  'красный': getPublicPath('red.png'),
+  red: getPublicPath('red.png'),
+  'желтый': getPublicPath('yellow.png'),
+  yellow: getPublicPath('yellow.png'),
+  'синий': getPublicPath('blue.png'),
+  blue: getPublicPath('blue.png'),
+  'зеленый': getPublicPath('green.png'),
+  green: getPublicPath('green.png')
 }
 
 function getPlayerTokenImage(color) {
@@ -512,22 +519,22 @@ function getPlayerTokenImage(color) {
 }
 
 const SUSPECT_IMAGES = {
-  Ted: `${BASE_URL}suspects/ted.png`,
-  Alice: `${BASE_URL}suspects/alice.png`,
-  Vera: `${BASE_URL}suspects/vera.png`,
-  Oliver: `${BASE_URL}suspects/oliver.png`,
-  Kevin: `${BASE_URL}suspects/kevin.png`,
-  Ralph: `${BASE_URL}suspects/ralf.png`,
-  Eva: `${BASE_URL}suspects/eva.png`,
-  Lucy: `${BASE_URL}suspects/lucy.png`,
-  Julia: `${BASE_URL}suspects/julia.png`,
-  Mary: `${BASE_URL}suspects/mary.png`,
-  Lily: `${BASE_URL}suspects/lily.png`,
-  Patrick: `${BASE_URL}suspects/patrick.png`,
-  Daisy: `${BASE_URL}suspects/daisy.png`,
-  Neil: `${BASE_URL}suspects/neil.png`,
-  Anna: `${BASE_URL}suspects/anna.png`,
-  Claire: `${BASE_URL}suspects/claire.png`,
+  Ted: getPublicPath('suspects/ted.png'),
+  Alice: getPublicPath('suspects/alice.png'),
+  Vera: getPublicPath('suspects/vera.png'),
+  Oliver: getPublicPath('suspects/oliver.png'),
+  Kevin: getPublicPath('suspects/kevin.png'),
+  Ralph: getPublicPath('suspects/ralf.png'),
+  Eva: getPublicPath('suspects/eva.png'),
+  Lucy: getPublicPath('suspects/lucy.png'),
+  Julia: getPublicPath('suspects/julia.png'),
+  Mary: getPublicPath('suspects/mary.png'),
+  Lily: getPublicPath('suspects/lily.png'),
+  Patrick: getPublicPath('suspects/patrick.png'),
+  Daisy: getPublicPath('suspects/daisy.png'),
+  Neil: getPublicPath('suspects/neil.png'),
+  Anna: getPublicPath('suspects/anna.png'),
+  Claire: getPublicPath('suspects/claire.png'),
 }
 
 /* =========================================================
