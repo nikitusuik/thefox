@@ -1,4 +1,8 @@
-const API_BASE = '/API';
+const API_BASE =
+  import.meta.env.PROD
+    ? 'https://se.ifmo.ru/~s368719/kovar/API'
+    : '/API';
+
 
 // sessionStorage = токен свой у каждой вкладки (два игрока в двух вкладках на localhost не затирают друг друга)
 // Если нужен один токен на все вкладки — замените на localStorage
