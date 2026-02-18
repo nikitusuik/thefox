@@ -1,0 +1,43 @@
+@font-face {
+  font-family: 'Gotham Pro';
+  src: url('/fonts/GothamPro.woff2') format('woff2'),
+       url('/fonts/GothamPro.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gotham Pro';
+  src: url('/fonts/GothamPro-Bold.woff2') format('woff2'),
+       url('/fonts/GothamPro-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  font-family: 'Gotham Pro', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+#app {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.app-root {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  padding: 16px;
+  font-family: 'Gotham Pro', system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  box-sizing: border-box;
+}

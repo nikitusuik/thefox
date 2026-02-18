@@ -1,0 +1,333 @@
+/* Lobby Page Styles */
+
+.lobby-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.lobby-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.lobby-title {
+  margin: 0;
+  font-family: 'Gaegu', cursive;
+  color: #65430D;
+}
+
+.lobby-error {
+  color: #b00020;
+}
+
+.lobby-refresh-info {
+  margin-left: auto;
+  opacity: 0.7;
+}
+
+.lobby-loading {
+  opacity: 0.7;
+}
+
+.lobby-empty-message {
+  opacity: 0.7;
+}
+
+.lobby-rooms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+}
+
+.lobby-room-card {
+  width: 630px;
+  height: 138px;
+  border-radius: 8px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background-image: url('/podlozhka.png');
+  background-size: 630px 138px;
+  background-position: top left;
+  background-repeat: no-repeat;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.lobby-room-info {
+  min-width: 153px;
+  flex-shrink: 0;
+  padding: 8px 17px 8px 77px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.lobby-room-info strong {
+  font-size: 14px;
+  display: block;
+  margin-bottom: 3px;
+  font-family: 'Gaegu', cursive;
+  color: #65430D;
+}
+
+.lobby-room-details {
+  opacity: 0.7;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.lobby-room-turn-time {
+  margin-left: 8px;
+  opacity: 0.7;
+}
+
+.lobby-room-players {
+  flex: 1;
+  opacity: 0.85;
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 8px 17px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+}
+
+.lobby-room-players-count {
+  display: flex;
+  align-items: center;
+}
+
+.lobby-room-players-count strong {
+  font-family: 'Gaegu', cursive;
+  color: #65430D;
+}
+
+.lobby-room-free-seats {
+  opacity: 0.7;
+}
+
+.lobby-room-players-list {
+  font-size: 10px;
+  opacity: 0.8;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px;
+}
+
+.lobby-room-players-label {
+  opacity: 0.7;
+  margin-right: 4px;
+}
+
+.lobby-room-player-name {
+  font-weight: 500;
+}
+
+.lobby-room-card button {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  font-size: 12px;
+  min-width: 68px;
+  margin-right: 77px;
+  align-self: center;
+}
+
+.lobby-footer {
+  margin-top: 12px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+/* Modal Styles */
+.lobby-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.lobby-modal-content {
+  width: 640px;
+  height: 384px;
+  background-image: url('/podlozhka2.png');
+  background-size: 110% 110%;
+  background-position: top left;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lobby-modal-content > * {
+  padding-left: 120px;
+  padding-right: 50px;
+}
+
+.lobby-modal-title {
+  margin: 0;
+  padding-top: 90px;
+  padding-bottom: 16px;
+  font-size: 22px;
+  font-family: 'Gaegu', cursive;
+  color: #65430D;
+}
+
+.lobby-modal-description {
+  margin-bottom: 18px;
+  font-size: 16px;
+  opacity: 0.8;
+  padding-bottom: 0;
+}
+
+.lobby-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 0;
+}
+
+.lobby-modal-field-label {
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.lobby-modal-buttons-group {
+  display: flex;
+  gap: 8px;
+}
+
+.lobby-modal-buttons-group-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lobby-modal-button {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #222;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.lobby-modal-buttons-group .lobby-modal-button {
+  flex: none;
+}
+
+.lobby-modal-button-selected-players {
+  border: none;
+  background: #1e3a5f;
+}
+
+.lobby-modal-button-selected-time {
+  border: none;
+  background: #1b5e20;
+}
+
+.lobby-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 10px;
+}
+
+.lobby-modal-button-cancel {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  background: #222;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.lobby-modal-button-create {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  background: #2e7d32;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+/* Responsive styles for lobby room card */
+@media (max-width: 700px) {
+  .lobby-room-card {
+    width: 100%;
+    max-width: 630px;
+    height: auto;
+    min-height: 138px;
+    aspect-ratio: 630 / 138;
+    padding: 10px 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .lobby-room-card {
+    padding: 10px 12px;
+    gap: 12px;
+  }
+  
+  .lobby-room-info {
+    min-width: 140px;
+  }
+  
+  .lobby-room-info strong {
+    font-size: 14px;
+  }
+  
+  .lobby-room-details {
+    font-size: 12px;
+  }
+  
+  .lobby-room-players {
+    font-size: 13px;
+  }
+  
+  .lobby-room-card button {
+    padding: 6px 12px;
+    font-size: 13px;
+    min-width: 70px;
+  }
+}
