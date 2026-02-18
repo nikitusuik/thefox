@@ -3,7 +3,6 @@ const API_BASE =
     ? 'https://se.ifmo.ru/~s368719/kovar/API'
     : '/API';
 
-
 // sessionStorage = токен свой у каждой вкладки (два игрока в двух вкладках на localhost не затирают друг друга)
 // Если нужен один токен на все вкладки — замените на localStorage
 const tokenStorage = typeof sessionStorage !== 'undefined' ? sessionStorage : localStorage;
@@ -32,29 +31,31 @@ async function safeJson(res) {
   return data;
 }
 
-export async function listGames() {
-  const res = await fetch(`${API_BASE}/list_games.php`, { method: 'GET' });
-  return safeJson(res);
+function toFormBody(obj) {
+  const params = new URLSearchParams();
+  for (const [k, v] of Object.entries(obj || {})) {
+    if (v === undefined || v === null) continue;
+    params.append(k, String(v));
+  }
+  return params.toString();
 }
 
-export async function createGame(turntime, seatcount) {
-  const res = await fetch(`${API_BASE}/create_game.php`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ turntime, seatcount }),
-  });
-  return safeJson(res);
-}
-
-export async function joinGame(game_id, login) {
-  const res = await fetch(`${API_BASE}/join_game.php`, {
+async function postForm(path, data, withAuth = false) {
+  const res = await fetch(`${API_BASE}/${path}`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
-      ...getAuthHeaders(),
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      ...(withAuth ? getAuthHeaders() : {}),
     },
-    body: JSON.stringify({ game_id, login }),
+    body: toFormBody(data),
   });
+  return safeJson(res);
+}
+
+// -------------------- GET --------------------
+
+export async function listGames() {
+  const res = await fetch(`${API_BASE}/list_games.php`, { method: 'GET' });
   return safeJson(res);
 }
 
@@ -66,84 +67,41 @@ export async function getGameState(game_id) {
   return safeJson(res);
 }
 
-export async function authLogin(login, password) {
-  const res = await fetch(`${API_BASE}/auth_login.php`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ login, password }),
-  });
-  return safeJson(res);
+// -------------------- POST (form-urlencoded) --------------------
+
+export function authLogin(login, password) {
+  return postForm('auth_login.php', { login, password }, false);
 }
 
-export async function createPlayer(login, password) {
-  const res = await fetch(`${API_BASE}/create_player.php`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ login, password }),
-  });
-  return safeJson(res);
+export function createPlayer(login, password) {
+  return postForm('create_player.php', { login, password }, false);
 }
 
-export async function chooseAction(game_id, login, direction) {
-  const res = await fetch(`${API_BASE}/choose_action.php`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...getAuthHeaders(),
-    },
-    body: JSON.stringify({ game_id, login, direction }),
-  });
-  return safeJson(res);
+export function createGame(turntime, seatcount) {
+  return postForm('create_game.php', { turntime, seatcount }, false);
 }
 
-export async function movePlayer(game_id, login, max_steps, to_x, to_y) {
-  const res = await fetch(`${API_BASE}/move.php`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...getAuthHeaders(),
-    },
-    body: JSON.stringify({ game_id, login, max_steps, to_x, to_y }),
-  });
-  return safeJson(res);
+export function joinGame(game_id, login) {
+  return postForm('join_game.php', { game_id, login }, true);
 }
 
-export async function openSuspect(game_id, login, suspect_name) {
-  const res = await fetch(`${API_BASE}/open_suspect.php`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...getAuthHeaders(),
-    },
-    body: JSON.stringify({ game_id, login, suspect_name }),
-  });
-  return safeJson(res);
+export function chooseAction(game_id, login, direction) {
+  return postForm('choose_action.php', { game_id, login, direction }, true);
+}
+
+export function movePlayer(game_id, login, max_steps, to_x, to_y) {
+  return postForm('move.php', { game_id, login, max_steps, to_x, to_y }, true);
+}
+
+export function openSuspect(game_id, login, suspect_name) {
+  return postForm('open_suspect.php', { game_id, login, suspect_name }, true);
+}
+
+export function accuse(game_id, login, suspect_name) {
+  return postForm('accuse.php', { game_id, login, suspect_name }, true);
 }
 
 export async function skipTurn(gameId, login) {
-  const r = await fetch(`${API_BASE}/skip_turn.php`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...getAuthHeaders(),
-    },
-    body: JSON.stringify({ game_id: Number(gameId), login }),
-  });
-  const data = await r.json();
-  if (!r.ok || data.ok === false) {
-    throw new Error(data?.error || 'skip_turn error');
-  }
-  return data;
-}
-
-export async function accuse(game_id, login, suspect_name) {
-  const res = await fetch(`${API_BASE}/accuse.php`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...getAuthHeaders(),
-    },
-    body: JSON.stringify({ game_id, login, suspect_name }),
-  });
-  return safeJson(res);
+  // оставил отдельной, но тоже через postForm — так безопаснее
+  return postForm('skip_turn.php', { game_id: Number(gameId), login }, true);
 }
