@@ -41,30 +41,59 @@ function toFormBody(obj) {
 }
 
 async function postForm(path, data, withAuth = false) {
-  const res = await fetch(`${API_BASE}/${path}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      ...(withAuth ? getAuthHeaders() : {}),
-    },
-    body: toFormBody(data),
-  });
-  return safeJson(res);
+  try {
+    const res = await fetch(`${API_BASE}/${path}`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        ...(withAuth ? getAuthHeaders() : {}),
+      },
+      body: toFormBody(data),
+    });
+    return safeJson(res);
+  } catch (error) {
+    // Обработка CORS и сетевых ошибок
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      throw new Error(`CORS ошибка: сервер не разрешает запросы с этого домена. Проверьте настройки CORS на сервере ${API_BASE}`);
+    }
+    throw error;
+  }
 }
 
 // -------------------- GET --------------------
 
 export async function listGames() {
-  const res = await fetch(`${API_BASE}/list_games.php`, { method: 'GET' });
-  return safeJson(res);
+  try {
+    const res = await fetch(`${API_BASE}/list_games.php`, { 
+      method: 'GET',
+      mode: 'cors'
+    });
+    return safeJson(res);
+  } catch (error) {
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      throw new Error(`CORS ошибка: сервер не разрешает запросы с этого домена. Проверьте настройки CORS на сервере ${API_BASE}`);
+    }
+    throw error;
+  }
 }
 
 export async function getGameState(game_id) {
-  const res = await fetch(
-    `${API_BASE}/game_state.php?game_id=${encodeURIComponent(game_id)}`,
-    { method: 'GET' },
-  );
-  return safeJson(res);
+  try {
+    const res = await fetch(
+      `${API_BASE}/game_state.php?game_id=${encodeURIComponent(game_id)}`,
+      { 
+        method: 'GET',
+        mode: 'cors'
+      },
+    );
+    return safeJson(res);
+  } catch (error) {
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      throw new Error(`CORS ошибка: сервер не разрешает запросы с этого домена. Проверьте настройки CORS на сервере ${API_BASE}`);
+    }
+    throw error;
+  }
 }
 
 // -------------------- POST (form-urlencoded) --------------------

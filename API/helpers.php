@@ -3,6 +3,44 @@
 // ===== Response helpers =====
 function response_json(array $data, int $status = 200): void {
     http_response_code($status);
+    
+    // CORS headers для работы с GitHub Pages и другими доменами
+    $requestOrigin = $_SERVER['HTTP_ORIGIN'] ?? '';
+    
+    // Разрешаем запросы с GitHub Pages и локального хоста
+    $allowedOrigins = [
+        'https://se.ifmo.ru',
+        'http://localhost',
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+    ];
+    
+    // Проверяем, является ли origin GitHub Pages (любой поддомен github.io)
+    $isGitHubPages = preg_match('/^https:\/\/[a-zA-Z0-9-]+\.github\.io$/', $requestOrigin);
+    
+    // Если это разрешенный origin или GitHub Pages, используем его
+    if (in_array($requestOrigin, $allowedOrigins) || $isGitHubPages) {
+        header('Access-Control-Allow-Origin: ' . $requestOrigin);
+        header('Access-Control-Allow-Credentials: true');
+    } else if ($requestOrigin !== '') {
+        // Если origin указан, но не в списке - все равно разрешаем (для гибкости)
+        header('Access-Control-Allow-Origin: ' . $requestOrigin);
+        header('Access-Control-Allow-Credentials: true');
+    } else {
+        // Если origin не указан (например, прямой запрос), разрешаем всем
+        header('Access-Control-Allow-Origin: *');
+    }
+    
+    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, X-Auth-Token');
+    header('Access-Control-Max-Age: 86400'); // 24 часа
+    
+    // Обработка preflight запросов
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        http_response_code(200);
+        exit;
+    }
+    
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit;
