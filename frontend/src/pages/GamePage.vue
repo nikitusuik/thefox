@@ -473,30 +473,33 @@ import { getGameState, chooseAction, movePlayer, openSuspect, accuse, skipTurn }
 import { translateItem } from '../utils/translations'
 import fieldImage from '../assets/field.png'
 
+// Базовый путь для статических файлов (учитывает base path из vite.config.js)
+const BASE_URL = import.meta.env.BASE_URL
+
 // Путь к изображению лапок
-const pawPrintsImage = '/paw-prints.png'
+const pawPrintsImage = `${BASE_URL}paw-prints.png`
 // Путь к изображению лиса
-const foxImage = '/fox.png'
+const foxImage = `${BASE_URL}fox.png`
 // Пути к изображениям кубиков
-const dice1PawImage = '/1paw.png'
-const dice2PawsImage = '/2paws.png'
-const diceEyeImage = '/eye.png'
+const dice1PawImage = `${BASE_URL}1paw.png`
+const dice2PawsImage = `${BASE_URL}2paws.png`
+const diceEyeImage = `${BASE_URL}eye.png`
 
 // Картинки подозреваемых и рубашки.
 // Положи файлы в frontend/public/suspects/ с такими именами,
 // либо поправь пути под свои.
-const SUSPECT_BACK_IMG = '/suspects/back.png'
+const SUSPECT_BACK_IMG = `${BASE_URL}suspects/back.png`
 
 // Фишки игроков (цвет из join_game / game_state.players.color)
 const PLAYER_TOKEN_IMAGES = {
-  'красный': '/red.png',
-  red: '/red.png',
-  'желтый': '/yellow.png',
-  yellow: '/yellow.png',
-  'синий': '/blue.png',
-  blue: '/blue.png',
-  'зеленый': '/green.png',
-  green: '/green.png'
+  'красный': `${BASE_URL}red.png`,
+  red: `${BASE_URL}red.png`,
+  'желтый': `${BASE_URL}yellow.png`,
+  yellow: `${BASE_URL}yellow.png`,
+  'синий': `${BASE_URL}blue.png`,
+  blue: `${BASE_URL}blue.png`,
+  'зеленый': `${BASE_URL}green.png`,
+  green: `${BASE_URL}green.png`
 }
 
 function getPlayerTokenImage(color) {
@@ -506,22 +509,22 @@ function getPlayerTokenImage(color) {
 }
 
 const SUSPECT_IMAGES = {
-  Ted: '/suspects/ted.png',
-  Alice: '/suspects/alice.png',
-  Vera: '/suspects/vera.png',
-  Oliver: '/suspects/oliver.png',
-  Kevin: '/suspects/kevin.png',
-  Ralph: '/suspects/ralph.png',
-  Eva: '/suspects/eva.png',
-  Lucy: '/suspects/lucy.png',
-  Julia: '/suspects/julia.png',
-  Mary: '/suspects/mary.png',
-  Lily: '/suspects/lily.png',
-  Patrick: '/suspects/patrick.png',
-  Daisy: '/suspects/daisy.png',
-  Neil: '/suspects/neil.png',
-  Anna: '/suspects/anna.png',
-  Claire: '/suspects/claire.png',
+  Ted: `${BASE_URL}suspects/ted.png`,
+  Alice: `${BASE_URL}suspects/alice.png`,
+  Vera: `${BASE_URL}suspects/vera.png`,
+  Oliver: `${BASE_URL}suspects/oliver.png`,
+  Kevin: `${BASE_URL}suspects/kevin.png`,
+  Ralph: `${BASE_URL}suspects/ralph.png`,
+  Eva: `${BASE_URL}suspects/eva.png`,
+  Lucy: `${BASE_URL}suspects/lucy.png`,
+  Julia: `${BASE_URL}suspects/julia.png`,
+  Mary: `${BASE_URL}suspects/mary.png`,
+  Lily: `${BASE_URL}suspects/lily.png`,
+  Patrick: `${BASE_URL}suspects/patrick.png`,
+  Daisy: `${BASE_URL}suspects/daisy.png`,
+  Neil: `${BASE_URL}suspects/neil.png`,
+  Anna: `${BASE_URL}suspects/anna.png`,
+  Claire: `${BASE_URL}suspects/claire.png`,
 }
 
 /* =========================================================

@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div class="login-container" :style="{ backgroundImage: `url(${loginBgImage})` }">
     <div class="login-content" :class="{ 'login-content--visible': fieldsVisible }">
       <h2 class="login-title">{{ isRegisterMode ? 'Регистрация' : 'Вход' }}</h2>
 
@@ -68,6 +68,10 @@ import { authLogin, createPlayer } from '../api'
 
 const emit = defineEmits(['login', 'enter-game'])
 
+// Базовый путь для статических файлов (учитывает base path из vite.config.js)
+const BASE_URL = import.meta.env.BASE_URL
+const loginBgImage = `${BASE_URL}loginbg.png`
+
 const isRegisterMode = ref(false)
 const login = ref(localStorage.getItem('login') || '')
 const password = ref('')
@@ -131,7 +135,6 @@ async function submit() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('/loginbg.png');
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
