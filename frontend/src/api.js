@@ -134,3 +134,7 @@ export async function skipTurn(gameId, login) {
   // оставил отдельной, но тоже через postForm — так безопаснее
   return postForm('skip_turn.php', { game_id: Number(gameId), login }, true);
 }
+
+export function leaveGame(game_id, login) {
+  return postForm('leave_game.php', { game_id, login }, true);
+}

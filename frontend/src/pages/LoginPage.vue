@@ -69,7 +69,10 @@ import { authLogin, createPlayer } from '../api'
 const emit = defineEmits(['login', 'enter-game'])
 
 // Базовый путь для статических файлов (учитывает base path из vite.config.js)
-const BASE_URL = import.meta.env.BASE_URL
+// BASE_URL всегда заканчивается на /, но на всякий случай добавляем если нет
+const BASE_URL = import.meta.env.BASE_URL.endsWith('/') 
+  ? import.meta.env.BASE_URL 
+  : import.meta.env.BASE_URL + '/'
 const loginBgImage = `${BASE_URL}loginbg.png`
 
 const isRegisterMode = ref(false)

@@ -35,6 +35,7 @@ import LoginPage from './pages/LoginPage.vue'
 import LobbyPage from './pages/LobbyPage.vue'
 import GamePage from './pages/GamePage.vue'
 import bgImage from './assets/bg.png'
+import { leaveGame as leaveGameAPI } from './api'
 
 const login = ref(localStorage.getItem('login') || '')
 const gameId = ref(localStorage.getItem('game_id') || '')
@@ -54,8 +55,19 @@ function onEnterGame(newGameId) {
   localStorage.setItem('game_id', String(newGameId))
 }
 
-function leaveGame() {
+async function leaveGame() {
   console.log('[App] leaveGame')
+  
+  // Вызываем API для удаления игрока из игры
+  if (gameId.value && login.value) {
+    try {
+      await leaveGameAPI(Number(gameId.value), login.value)
+      console.log('[App] Successfully left game via API')
+    } catch (error) {
+      console.error('[App] Error leaving game:', error)
+      // Продолжаем выход даже если API вернул ошибку
+    }
+  }
 
   gameId.value = ''
   localStorage.removeItem('game_id')

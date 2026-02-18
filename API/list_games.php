@@ -24,7 +24,9 @@ try {
     // ===== BLOCK: Удаляем неактивные игры (<=1 участника более 30 минут) =====
     $pdo->beginTransaction();
     
-    // Находим игры для удаления: players_now <= 1 и прошло более 30 минут
+    // Находим игры для удаления:
+    // - Игры с 0 игроков удаляем сразу (независимо от того, начались они или нет)
+    // - Игры с 1 игроком удаляем если прошло более 30 минут и игра началась
     $stmt = $pdo->query("
         WITH players_count AS (
             SELECT
@@ -42,11 +44,11 @@ try {
             WHERE COALESCE(pc.players_now, 0) <= 1
               AND (COALESCE(f.foxpos, 0) >= 0 AND COALESCE(f.foxpos, 0) < 37)
               AND (
-                  -- Вариант 1: Игра началась (turn_started_at установлен) и прошло более 30 минут
-                  (g.turn_started_at IS NOT NULL AND g.turn_started_at < NOW() - INTERVAL '30 minutes')
+                  -- Вариант 1: Игра с 0 игроков - удаляем сразу
+                  COALESCE(pc.players_now, 0) = 0
                   OR
-                  -- Вариант 2: Игра не началась (turn_started_at NULL) и нет игроков (0) - удаляем пустые комнаты
-                  (g.turn_started_at IS NULL AND COALESCE(pc.players_now, 0) = 0)
+                  -- Вариант 2: Игра началась (turn_started_at установлен) и прошло более 30 минут и остался 1 игрок
+                  (g.turn_started_at IS NOT NULL AND g.turn_started_at < NOW() - INTERVAL '30 minutes' AND COALESCE(pc.players_now, 0) = 1)
               )
         )
         SELECT gameid FROM games_to_delete

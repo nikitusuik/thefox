@@ -474,7 +474,10 @@ import { translateItem } from '../utils/translations'
 import fieldImage from '../assets/field.png'
 
 // Базовый путь для статических файлов (учитывает base path из vite.config.js)
-const BASE_URL = import.meta.env.BASE_URL
+// BASE_URL всегда заканчивается на /, но на всякий случай добавляем если нет
+const BASE_URL = import.meta.env.BASE_URL.endsWith('/') 
+  ? import.meta.env.BASE_URL 
+  : import.meta.env.BASE_URL + '/'
 
 // Путь к изображению лапок
 const pawPrintsImage = `${BASE_URL}paw-prints.png`
@@ -514,7 +517,7 @@ const SUSPECT_IMAGES = {
   Vera: `${BASE_URL}suspects/vera.png`,
   Oliver: `${BASE_URL}suspects/oliver.png`,
   Kevin: `${BASE_URL}suspects/kevin.png`,
-  Ralph: `${BASE_URL}suspects/ralph.png`,
+  Ralph: `${BASE_URL}suspects/ralf.png`,
   Eva: `${BASE_URL}suspects/eva.png`,
   Lucy: `${BASE_URL}suspects/lucy.png`,
   Julia: `${BASE_URL}suspects/julia.png`,
