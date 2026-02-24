@@ -36,6 +36,26 @@ try {
         response_error(400, 'game_id is required');
     }
 
+    // Удаляем игру, если с момента начала прошло 2+ часа (в т.ч. при полном стаке)
+    $stmt = $pdo->prepare("
+        SELECT 1 FROM games
+        WHERE gameid = :gid
+          AND turn_started_at IS NOT NULL
+          AND turn_started_at < NOW() - INTERVAL '2 hours'
+    ");
+    $stmt->execute([':gid' => $gameId]);
+    if ($stmt->fetchColumn()) {
+        $pdo->beginTransaction();
+        try {
+            delete_game_cascade($pdo, $gameId);
+            $pdo->commit();
+        } catch (Throwable $e) {
+            $pdo->rollBack();
+            throw $e;
+        }
+        response_error(404, 'Game not found');
+    }
+
     // Авто-скип хода, если таймер истёк (перед тем как отдавать состояние)
     auto_advance_turn_if_timeout($pdo, $gameId);
 

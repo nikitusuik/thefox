@@ -272,6 +272,46 @@ function auto_advance_turn_if_timeout(PDO $pdo, int $gameId): void {
     }
 }
 
+/**
+ * Каскадное удаление игры и всех связанных данных (moves, players, clues_in_game, …).
+ * Вызывать внутри уже открытой транзакции или без — функция сама не управляет транзакцией.
+ */
+function delete_game_cascade(PDO $pdo, int $gameId): void {
+    $stmt = $pdo->prepare("
+        DELETE FROM moves
+        WHERE playerid IN (
+            SELECT p.playerid FROM players p
+            JOIN cells c ON c.cellid = p.cellid
+            WHERE c.gameid = :gid
+        )
+    ");
+    $stmt->execute([':gid' => $gameId]);
+
+    $stmt = $pdo->prepare("
+        DELETE FROM players
+        WHERE cellid IN (SELECT cellid FROM cells WHERE gameid = :gid)
+    ");
+    $stmt->execute([':gid' => $gameId]);
+
+    $stmt = $pdo->prepare("DELETE FROM clues_in_game WHERE cellid IN (SELECT cellid FROM cells WHERE gameid = :gid)");
+    $stmt->execute([':gid' => $gameId]);
+
+    $stmt = $pdo->prepare("DELETE FROM suspect_clues_in_game WHERE gameid = :gid");
+    $stmt->execute([':gid' => $gameId]);
+
+    $stmt = $pdo->prepare("DELETE FROM suspects_in_game WHERE gameid = :gid");
+    $stmt->execute([':gid' => $gameId]);
+
+    $stmt = $pdo->prepare("DELETE FROM cells WHERE gameid = :gid");
+    $stmt->execute([':gid' => $gameId]);
+
+    $stmt = $pdo->prepare("DELETE FROM foxes WHERE id = :gid");
+    $stmt->execute([':gid' => $gameId]);
+
+    $stmt = $pdo->prepare("DELETE FROM games WHERE gameid = :gid");
+    $stmt->execute([':gid' => $gameId]);
+}
+
 function json_input(): array {
     // 1) пробуем JSON
     $raw = file_get_contents('php://input');
