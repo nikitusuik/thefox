@@ -1,64 +1,47 @@
 .game-page {
-  height: 100vh;
-  width: 100vw;
-  max-height: 100vh;
-  max-width: 100vw;
+  height: 100%;
+  width: 100%;
+  max-height: 100%;
+  max-width: 100%;
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  flex-direction: column;
   padding: 8px 80px 8px 8px;
-
   box-sizing: border-box;
-
-  /* ключ: НЕ обрезаем контент */
-  overflow: visible;
+  overflow: hidden;
 }
-
-
 
 .game-page-inner {
   width: 100%;
   height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-
-  /* ключ: НЕ обрезаем */
-  overflow: visible;
-
+  overflow: hidden;
   padding-right: 0;
 }
 
-
 .game-layout {
   display: flex;
-
-  /* чтобы правая колонка не ужималась и не обрезалась */
   justify-content: flex-start;
   gap: 24px;
-
-  align-items: flex-start;
+  align-items: stretch;
   flex: 1;
-
-  /* ключ: НЕ обрезаем */
-  overflow: visible;
-
+  overflow: hidden;
   min-width: 0;
   min-height: 0;
   height: 100%;
   width: 100%;
 }
 
-
 .game-left {
-  flex: 0 0 auto;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: visible;
+  overflow: hidden;
   min-width: 0;
   min-height: 0;
-  align-items: flex-start;
-  justify-content: flex-start;
-  height: 100%;
+  align-items: center;
+  justify-content: center;
   padding-left: 0;
   margin-right: 0;
 }
@@ -66,24 +49,27 @@
 
 
 .game-board-row {
-  flex: 0 0 auto;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: visible;
+  overflow: hidden;
   width: 100%;
-  align-items: flex-start;
-  justify-content: flex-start;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
   position: relative;
+  min-height: 0;
 }
 
 .game-board-and-debug {
   display: flex;
   gap: 12px;
-  align-items: flex-start;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  width: 100%;
-  overflow: visible;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
   position: relative;
 }
 
@@ -168,8 +154,11 @@
 .card--panel {
   min-width: 0;
   max-width: 100%;
-  max-height: 180px;
-  overflow: auto;
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  overflow-x: hidden;
   box-sizing: border-box;
 }
 
@@ -185,30 +174,23 @@
 }
 
 .game-right {
-  /* важно: ширина должна быть >= ширины player-card (348px) */
   flex: 0 0 380px;
   min-width: 380px;
   max-width: 380px;
-
   display: flex;
   flex-direction: column;
-  overflow: visible;
+  overflow: hidden;
   height: 100%;
   gap: 6px;
   align-items: stretch;
-
-  /* сдвиг вправо и по центру пустой области справа */
   margin-left: auto;
-  margin-right: 70px;
-  margin-top: 100px;
-
+  margin-right: 24px;
   padding: 12px 14px;
   padding-right: 14px;
   border-radius: 12px;
-
   box-sizing: border-box;
-  /* Edge: даём flex-детям возможность сжиматься, чтобы не обрезало */
   min-width: 0;
+  min-height: 0;
 }
 
 .game-right-leave-btn {
@@ -229,11 +211,11 @@
 
 .card--right {
   border-radius: 6px;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow: visible;
-  min-height: 0;
+  overflow: hidden;
   min-width: 0;
   box-sizing: border-box;
 }
@@ -421,13 +403,14 @@
   position: relative;
   flex-shrink: 0;
   transition: transform 0.3s ease;
-  margin: 100px 40px 40px 100px;
+  margin: 16px;
   padding: 0;
-  /* Уменьшен размер чтобы не было скролла вниз */
-  /* Увеличен margin снизу и справа чтобы карты не обрезались */
-  --board-size: min(800px, calc(100vh - 140px), calc(100vw - 420px));
+  /* Вмещается в viewport: место под хедер, правый блок, отступы */
+  --board-size: min(800px, calc(100vh - 120px), calc(100vw - 380px - 88px - 64px));
   width: var(--board-size);
   height: var(--board-size);
+  max-width: calc(100% - 32px);
+  max-height: calc(100% - 32px);
   overflow: visible;
 }
 
