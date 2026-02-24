@@ -94,6 +94,7 @@
 
 .card--actions {
   min-width: 200px;
+  flex-shrink: 0;
 }
 
 /* Читаемость: секции и кнопка в правой колонке */
@@ -154,7 +155,7 @@
 .card--panel {
   min-width: 0;
   max-width: 100%;
-  flex: 1;
+  flex: 1 1 0;
   min-height: 0;
   max-height: none;
   overflow-y: auto;
@@ -549,11 +550,11 @@
   max-height: 120px;
 }
 
-/* suspect cards around board */
+/* suspect cards around board — уменьшены, чтобы не обрезались на всех разрешениях */
 .suspect-card {
   position: absolute;
-  width: clamp(70px, 12%, 100px);
-  height: clamp(98px, 17%, 140px);
+  width: clamp(58px, 10%, 82px);
+  height: clamp(82px, 14%, 116px);
   perspective: 800px;
   transform-origin: center center;
   z-index: 1;
@@ -570,13 +571,13 @@
 .suspect-card-face {
   position: absolute;
   inset: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 6px;
+  padding: 4px;
   box-sizing: border-box;
   background-size: contain;
   background-position: center;
@@ -598,14 +599,14 @@
 
 .suspect-card-name {
   position: absolute;
-  bottom: 8px;
+  bottom: 4px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 12px;
+  font-size: 10px;
   font-weight: bold;
   color: #1f1f1f;
   background: rgba(255, 255, 255, 0.9);
-  padding: 2px 6px;
+  padding: 2px 4px;
   border-radius: 4px;
   white-space: nowrap;
 }
@@ -624,26 +625,26 @@
   transform: scale(1.05);
 }
 
-/* positions: 4 top, 4 right, 4 bottom, 4 left — равномерно по центру каждой стороны (центры в 20%, 40%, 60%, 80%) */
-.card-pos-top-1 { top: -3%; left: 14%; }
-.card-pos-top-2 { top: -3%; left: 34%; }
-.card-pos-top-3 { top: -3%; left: 54%; }
-.card-pos-top-4 { top: -3%; left: 74%; }
+/* positions: 4 top, 4 right, 4 bottom, 4 left — чуть внутрь, чтобы не обрезало */
+.card-pos-top-1 { top: 0; left: 14%; }
+.card-pos-top-2 { top: 0; left: 34%; }
+.card-pos-top-3 { top: 0; left: 54%; }
+.card-pos-top-4 { top: 0; left: 74%; }
 
-.card-pos-right-1 { right: -3%; top: 12%; }
-.card-pos-right-2 { right: -3%; top: 32%; }
-.card-pos-right-3 { right: -3%; top: 52%; }
-.card-pos-right-4 { right: -3%; top: 72%; }
+.card-pos-right-1 { right: 0; top: 12%; }
+.card-pos-right-2 { right: 0; top: 32%; }
+.card-pos-right-3 { right: 0; top: 52%; }
+.card-pos-right-4 { right: 0; top: 72%; }
 
-.card-pos-bottom-1 { bottom: -3%; left: 14%; }
-.card-pos-bottom-2 { bottom: -3%; left: 34%; }
-.card-pos-bottom-3 { bottom: -3%; left: 54%; }
-.card-pos-bottom-4 { bottom: -3%; left: 74%; }
+.card-pos-bottom-1 { bottom: 0; left: 14%; }
+.card-pos-bottom-2 { bottom: 0; left: 34%; }
+.card-pos-bottom-3 { bottom: 0; left: 54%; }
+.card-pos-bottom-4 { bottom: 0; left: 74%; }
 
-.card-pos-left-1 { left: -3%; top: 12%; }
-.card-pos-left-2 { left: -3%; top: 32%; }
-.card-pos-left-3 { left: -3%; top: 52%; }
-.card-pos-left-4 { left: -3%; top: 72%; }
+.card-pos-left-1 { left: 0; top: 12%; }
+.card-pos-left-2 { left: 0; top: 32%; }
+.card-pos-left-3 { left: 0; top: 52%; }
+.card-pos-left-4 { left: 0; top: 72%; }
 
 /* Кликабельные карточки подозреваемых */
 .suspect-card--clickable {
