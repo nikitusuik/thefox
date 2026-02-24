@@ -170,7 +170,8 @@ async function submit() {
 
 .login-title {
   margin: 0 0 12px;
-  font-family: 'Gaegu', cursive;
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
   color: #65430D;
   font-size: 28px;
 }

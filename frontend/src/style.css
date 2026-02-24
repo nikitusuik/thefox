@@ -33,11 +33,14 @@ html, body {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background-image: var(--bg-image);
+  /* затемнение фона, чтобы текст не сливался с деревом */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), var(--bg-image);
   background-size: cover;
   background-position: center;
   background-repeat: repeat;
-  padding: 16px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
   font-family: 'Gotham Pro', system-ui, -apple-system, Segoe UI, Roboto, Arial;
   box-sizing: border-box;
 }

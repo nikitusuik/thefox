@@ -10,21 +10,84 @@
   gap: 10px;
   align-items: center;
   margin-bottom: 12px;
+  justify-content: space-between;
 }
 
 .lobby-title {
   margin: 0;
-  font-family: 'Gaegu', cursive;
-  color: #65430D;
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  color: #1f1f1f;
+  flex-shrink: 0;
+}
+
+.lobby-btn-refresh {
+  display: none;
+}
+
+.lobby-btn-create {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 2px solid #388e3c;
+  background: #4caf50;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.lobby-btn-create:hover:not(:disabled) {
+  background: #388e3c;
+}
+
+.lobby-btn-create:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .lobby-error {
   color: #b00020;
 }
 
-.lobby-refresh-info {
+
+.lobby-user-block {
   margin-left: auto;
-  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-image: url('/podlozhka.png');
+  background-size: 200% auto;
+  background-position: left center;
+  background-repeat: no-repeat;
+  box-sizing: border-box;
+  min-height: 44px;
+}
+.lobby-user-nick {
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-weight: 600;
+  color: #65430D;
+  font-size: 14px;
+}
+.lobby-user-logout {
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #65430D;
+  background: rgba(101, 67, 13, 0.12);
+  color: #65430D;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.lobby-user-logout:hover {
+  background: rgba(101, 67, 13, 0.22);
 }
 
 .lobby-loading {
@@ -66,13 +129,16 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .lobby-room-info strong {
   font-size: 14px;
   display: block;
   margin-bottom: 3px;
-  font-family: 'Gaegu', cursive;
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
   color: #65430D;
 }
 
@@ -105,7 +171,8 @@
 }
 
 .lobby-room-players-count strong {
-  font-family: 'Gaegu', cursive;
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
   color: #65430D;
 }
 
@@ -203,7 +270,8 @@
   padding-top: 90px;
   padding-bottom: 16px;
   font-size: 22px;
-  font-family: 'Gaegu', cursive;
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
   color: #65430D;
 }
 

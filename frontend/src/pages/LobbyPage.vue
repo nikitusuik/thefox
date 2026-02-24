@@ -1,18 +1,17 @@
 <template>
   <div class="lobby-container">
     <div class="lobby-header">
-      <h2 class="lobby-title">Rooms</h2>
+      <h2 class="lobby-title">Комнаты</h2>
 
-      <button :disabled="loadingCreate" @click="openCreateModal">
-        {{ loadingCreate ? 'Creating...' : 'Create game' }}
+      <button class="lobby-btn-create" :disabled="loadingCreate" @click="openCreateModal">
+        {{ loadingCreate ? 'Создание...' : 'Создать игру' }}
       </button>
 
-      <button :disabled="loadingList" @click="refresh">
+      <button class="lobby-btn-refresh" :disabled="loadingList" @click="refresh">
         {{ loadingList ? '...' : 'Refresh' }}
       </button>
 
       <span v-if="error" class="lobby-error">{{ error }}</span>
-      <span class="lobby-refresh-info">refresh: {{ tick }}</span>
     </div>
 
     <div v-if="loadingList && rooms.length === 0" class="lobby-loading">Loading...</div>
@@ -28,7 +27,7 @@
         class="lobby-room-card"
       >
         <div class="lobby-room-info">
-          <strong>Игра #{{ r.game_id }}</strong>
+          <strong class="lobby-room-title">Игра</strong>
           <div class="lobby-room-details">
             лис: {{ r.foxpos }}
             <span class="lobby-room-turn-time">ход: {{ r.turntime }}с</span>
@@ -71,7 +70,7 @@
       class="lobby-modal-overlay"
     >
       <div class="lobby-modal-content">
-        <h3 class="lobby-modal-title">New game</h3>
+        <h3 class="lobby-modal-title">Новая игра</h3>
 
         <div class="lobby-modal-description">
           Выбери, сколько игроков и сколько секунд на ход.
@@ -147,7 +146,7 @@ import { listGames, createGame, joinGame } from '../api'
 const props = defineProps({
   login: { type: String, required: true },
 })
-const emit = defineEmits(['enter-game'])
+const emit = defineEmits(['enter-game', 'logout'])
 
 const rooms = ref([])
 const loadingList = ref(false)

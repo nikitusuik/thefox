@@ -61,6 +61,26 @@ async function postForm(path, data, withAuth = false) {
   }
 }
 
+async function postJson(path, data, withAuth = false) {
+  try {
+    const res = await fetch(`${API_BASE}/${path}`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        ...(withAuth ? getAuthHeaders() : {}),
+      },
+      body: JSON.stringify(data || {}),
+    });
+    return safeJson(res);
+  } catch (error) {
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      throw new Error(`CORS ошибка: сервер не разрешает запросы с этого домена. Проверьте настройки CORS на сервере ${API_BASE}`);
+    }
+    throw error;
+  }
+}
+
 // -------------------- GET --------------------
 
 export async function listGames() {
@@ -99,11 +119,11 @@ export async function getGameState(game_id) {
 // -------------------- POST (form-urlencoded) --------------------
 
 export function authLogin(login, password) {
-  return postForm('auth_login.php', { login, password }, false);
+  return postJson('auth_login.php', { login: String(login || '').trim(), password: String(password || '') }, false);
 }
 
 export function createPlayer(login, password) {
-  return postForm('create_player.php', { login, password }, false);
+  return postJson('create_player.php', { login: String(login || '').trim(), password: String(password || '') }, false);
 }
 
 export function createGame(turntime, seatcount) {

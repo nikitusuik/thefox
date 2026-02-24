@@ -95,17 +95,19 @@
             <strong>{{ statusText }}</strong>
           </div>
 
-          <div v-if="state && isMyTurn && !isGameOver" style="margin-bottom:6px; font-size:11px; flex-shrink:0;">
+         
+          <div v-if="state && isMyTurn && !isGameOver" class="game-right-timer">
             ⏳ <strong>{{ turnLeft }}</strong>s
           </div>
 
-          <div v-if="state" style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
-            <div class="players-title" style="font-size:11px;">Игроки</div>
+          <div v-if="state" class="game-right-players-wrap">
+            <div class="players-title">Игроки</div>
             <div class="players-list">
               <div
                 v-for="p in state.players"
                 :key="p.login"
                 class="player-card"
+                :class="{ 'player-card--you': isYou(p) }"
               >
                 <div class="player-card-header">
                   <span
@@ -115,6 +117,7 @@
                   />
                   <div class="player-card-name">
                     <strong>{{ p.login }}</strong>
+                    <span v-if="isYou(p)" class="player-card-you-badge">(вы)</span>
                   </div>
                   <div class="player-card-seat">
                     #{{ p.seatnumber }}
@@ -124,7 +127,7 @@
             </div>
           </div>
 
-          <div class="game-right-footer" style="font-size:9px; flex-shrink:0;">
+          <div class="game-right-footer">
             poll: {{ pollCount }}
           </div>
         </div>
@@ -149,20 +152,20 @@
 
         <!-- ACTIONS -->
         <div v-if="state" class="card card--actions">
-          <div style="margin-bottom:8px;"><strong>Действия</strong></div>
+          <div class="game-right-section-title">Действия</div>
 
           <div style="display:flex; gap:6px; flex-wrap:wrap;">
             <button
+              class="game-right-action-btn"
               @click="openActionModal"
               :disabled="!canChooseAction || actionLoading"
-              style="padding:6px 10px; font-size:10px;"
             >
               {{ actionLoading ? '...' : 'Выбрать действие' }}
             </button>
 
           </div>
 
-          <div style="margin-top:6px; font-size:9px; opacity:.85;">
+          <div class="game-right-mode-hint">
             <div v-if="moveMode" style="color:#4caf50;">✅ Режим движения (≤ {{ myMaxSteps }} шагов) - кликните на клетки</div>
             <div v-if="suspectMode" style="color:#4caf50;">✅ Режим подозреваемых - кликните на карточки на поле</div>
           </div>
@@ -171,9 +174,9 @@
 
         <!-- OPENED CLUES - moved to right column -->
         <div v-if="state" class="card card--panel card--clues">
-          <div style="margin-bottom:6px; font-size:11px;"><strong>Открытые подсказки</strong></div>
+          <div class="game-right-section-title">Открытые подсказки</div>
 
-          <div v-if="openedClues.length === 0" style="opacity:.7; font-size:10px;">
+          <div v-if="openedClues.length === 0" class="game-right-empty-text">
             Нет подсказок
           </div>
 
@@ -194,16 +197,16 @@
             </div>
           </div>
 
-          <div style="margin-top:6px; font-size:9px; opacity:.7;">
+          <div class="game-right-legend">
             🟢 = есть у лиса, 🔴 = нет у лиса
           </div>
         </div>
 
         <!-- OPENED SUSPECTS - moved to right column -->
         <div v-if="state" class="card card--panel card--suspects-opened">
-          <div style="margin-bottom:6px; font-size:11px;"><strong>Открытые подозреваемые</strong></div>
+          <div class="game-right-section-title">Открытые подозреваемые</div>
 
-          <div v-if="openedSuspects.length === 0" style="opacity:.7; font-size:10px;">
+          <div v-if="openedSuspects.length === 0" class="game-right-empty-text">
             Нет открытых
           </div>
 
@@ -257,7 +260,7 @@
         @click.self="!diceRolling && !diceResult && (showActionModal = false)"
       >
         <div class="action-modal">
-          <h3 style="margin:0 0 20px; text-align:center;">Ваш ход</h3>
+          <h3>Ваш ход</h3>
           
           <div v-if="!diceRolling && !diceResult" class="action-modal-buttons">
             <button
@@ -355,22 +358,20 @@
               </div>
             </div>
           </div>
-          <div v-if="accuseError" style="color:#b00020; margin-bottom:10px; font-size:12px; text-align:center;">
-            {{ accuseError }}
-          </div>
-          <div style="display:flex; gap:10px; justify-content:center;">
+          <div v-if="accuseError" class="reveal-modal-error">{{ accuseError }}</div>
+          <div class="reveal-modal-actions">
             <button
               type="button"
-              class="action-modal-btn action-modal-btn--confirm"
+              class="reveal-modal-btn reveal-modal-btn--close"
               @click="closeRevealModal"
             >
               Закрыть
             </button>
             <button
               type="button"
-              class="action-modal-btn action-modal-btn--accuse"
+              class="reveal-modal-btn reveal-modal-btn--accuse"
               @click="handleAccuse(revealModalSuspect.susname)"
-              :disabled="!canAccuse || accuseLoading"
+              :disabled="accuseLoading"
             >
               {{ accuseLoading ? '...' : 'Обвинить' }}
             </button>
@@ -468,7 +469,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
+import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import { getGameState, chooseAction, movePlayer, openSuspect, accuse, skipTurn } from '../api'
 import { translateItem } from '../utils/translations'
 import fieldImage from '../assets/field.png'
@@ -674,12 +675,23 @@ function startTurnTimer(seconds) {
 /* =========================================================
    BLOCK 7: DERIVED COMPUTEDS (core flags)
    ========================================================= */
-const me = computed(() => state.value?.players?.find(p => p.login === props.login) || null)
+const me = computed(() => {
+  const players = state.value?.players
+  if (!Array.isArray(players)) return null
+  const loginLower = (props.login || '').trim().toLowerCase()
+  if (!loginLower) return null
+  return players.find(p => (p.login || '').trim().toLowerCase() === loginLower) || null
+})
 
 const isMyTurn = computed(() => {
   if (!me.value) return false
   return state.value?.game?.current_seat === me.value.seatnumber
 })
+
+function isYou(p) {
+  if (!p?.login || !props.login) return false
+  return (p.login || '').trim().toLowerCase() === (props.login || '').trim().toLowerCase()
+}
 
 const isGameOver = computed(() => {
   const foxpos = (state.value?.fox?.foxpos ?? 0)
@@ -694,7 +706,8 @@ const isGameOver = computed(() => {
 const myPending = computed(() => {
   const pa = state.value?.pending_actions
   if (!Array.isArray(pa)) return null
-  return pa.find(a => a.login === props.login) || null
+  const loginLower = (props.login || '').trim().toLowerCase()
+  return pa.find(a => (a.login || '').trim().toLowerCase() === loginLower) || null
 })
 
 const hasPending = computed(() => !!(myPending.value && myPending.value.direction !== null))
@@ -1194,10 +1207,10 @@ async function handleSuspectCardClick(suspect) {
 }
 
 async function handleAccuse(name) {
+  closeRevealModal()
   accuseMsg.value = ''
   accuseError.value = ''
 
-  if (!canAccuse.value) return
   if (accuseLoading.value) return
 
   accuseLoading.value = true
@@ -1464,7 +1477,17 @@ const statusText = computed(() => {
 
 const json = computed(() => JSON.stringify(state.value, null, 2))
 
-const emit = defineEmits(['leave'])
+const emit = defineEmits(['leave', 'header-players'])
+
+watch(
+  () => state.value?.players,
+  (players) => {
+    if (players && Array.isArray(players)) {
+      emit('header-players', players.map((p) => p.login))
+    }
+  },
+  { immediate: true }
+)
 
 function leaveRoom() {
   emit('leave')
